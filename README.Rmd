@@ -196,102 +196,43 @@ model1 <- plm(length_camp ~ log(gdppc) + colony + prim_meth + sec_defect + repre
                 prim_meth * pi_education + prim_meth * pi_soc_welfare +
                 prim_meth * pi_trad_media + prim_meth * pi_new_media + prim_meth * pi_courts + prim_meth * pi_police, data = agg_df, index = "loc_cow", model="random")
 
+library(RColorBrewer)
+nb.cols <- 24
+mycolors <- colorRampPalette(brewer.pal(8, "Dark2"))(nb.cols)
+
+broom::tidy(model1, conf.int = TRUE) %>% 
+  mutate(term = case_when(term == "sec_defect" ~ "Security Force Defections",
+                          term == "repression" ~ "Repression",
+                          term == "regime_support" ~ "Regime Support for Campaign", 
+                          term == "prim_meth" ~ "Violent Campaign",
+                          term == "in_media" ~ "Media Coverage of Campaign",
+                          term == "log(gdppc)" ~ "Log(GDP Per Capita)",
+                          term == "indiscrim" ~ "Indiscriminate Violence Against Campaign",
+                          term == "camp_support" ~ "Campaign Support",
+                          term == "camp_size" ~ "Campaign Size",
+                          term == "pi_education" ~ "Parallel Education",
+                          term == "pi_police" ~ "Parallel Law Enforcement",
+                          term == "pi_trad_media" ~ "Parallel Traditional Media",
+                          term == "pi_new_media" ~ "Parallel New Media",
+                          term == "pi_soc_welfare" ~ "Parallel Social Welfare",
+                          term == "pi_courts" ~ "Parallel Judicial System",
+                          term == "sdirect" ~ "Sanctions Against Regime",
+                          term == "length_camp" ~ "Campaign Length",
+                          term == "colony" ~ "Past Colonial History",
+                          TRUE ~ term)) %>%
+  ggplot(aes(estimate, term, xmin = conf.low, xmax = conf.high, height = 0, color = term)) +
+  geom_point() +
+  geom_vline(xintercept = 0, lty = 4) +
+  geom_errorbarh() +
+  guides(color = "none") + 
+  labs(x = "Effect on Log Odds of Success",
+       y = "Independent Variable",
+       title = "Coefficient Plot for Random Effects Linear Regression \n on Length of Campaign") + 
+  theme_minimal() + 
+  scale_color_manual(values=mycolors)
+
 ```
 
-$$
-\begin{table}[!htbp] \centering 
-  \caption{} 
-  \label{} 
-\begin{tabular}{@{\extracolsep{5pt}}lc} 
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
- & \multicolumn{1}{c}{\textit{Dependent variable:}} \\ 
-\cline{2-2} 
-\\[-1.8ex] & length\_camp \\ 
-\hline \\[-1.8ex] 
- Log(GDP Per Capita) & $-$0.331 \\ 
-  & (0.646) \\ 
-  & \\ 
- Past or Present Colony & 1.250 \\ 
-  & (1.257) \\ 
-  & \\ 
- Violent of Campaign & 3.314$^{*}$ \\ 
-  & (1.702) \\ 
-  & \\ 
- Security Force Defections & $-$2.457$^{*}$ \\ 
-  & (1.389) \\ 
-  & \\ 
- Repression of Campaign & 0.742 \\ 
-  & (0.898) \\ 
-  & \\ 
- Media Coverage & $-$2.248$^{**}$ \\ 
-  & (0.878) \\ 
-  & \\ 
- Indiscriminate Violence by Regime & $-$2.553$^{*}$ \\ 
-  & (1.303) \\ 
-  & \\ 
- Campaign Support & $-$1.059 \\ 
-  & (1.312) \\ 
-  & \\ 
- Campaign Size & $-$0.088 \\ 
-  & (0.614) \\ 
-  & \\ 
- Regime Support of Campaign & $-$3.194$^{***}$ \\ 
-  & (1.182) \\ 
-  & \\ 
- International Sanctions of Regime & 0.707 \\ 
-  & (1.726) \\ 
-  & \\ 
- Educational Systems & 3.557 \\ 
-  & (6.347) \\ 
-  & \\ 
- Law Enforcement & 1.306 \\ 
-  & (9.172) \\ 
-  & \\ 
- Social Welfare & $-$0.635 \\ 
-  & (2.138) \\ 
-  & \\ 
- Traditional Media & 1.773 \\ 
-  & (2.219) \\ 
-  & \\ 
- New Media & $-$0.235 \\ 
-  & (4.937) \\ 
-  & \\ 
- Judicial System & 2.948 \\ 
-  & (3.989) \\ 
-  & \\ 
- Violence * Education & $-$10.701 \\ 
-  & (7.537) \\ 
-  & \\ 
- Violence * Social Welfare & 9.919$^{*}$ \\ 
-  & (5.565) \\ 
-  & \\ 
- Violence * Traditional Media & 2.591 \\ 
-  & (3.020) \\ 
-  & \\ 
- Violence * New Media & 9.008 \\ 
-  & (5.781) \\ 
-  & \\ 
- Violence * Courts & $-$0.191 \\ 
-  & (4.542) \\ 
-  & \\ 
- Violence * Police & $-$4.690 \\ 
-  & (9.955) \\ 
-  & \\ 
- Constant & 8.572 \\ 
-  & (6.111) \\ 
-  & \\ 
-\hline \\[-1.8ex] 
-Observations & 178 \\ 
-R$^{2}$ & 0.363 \\ 
-Adjusted R$^{2}$ & 0.268 \\ 
-F Statistic & 88.379$^{***}$ \\ 
-\hline 
-\hline \\[-1.8ex] 
-\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
-\end{tabular} 
-\end{table} 
-$$
 
 ### Binomial Logistic Regression
 
@@ -331,7 +272,7 @@ broom::tidy(model2, conf.int = TRUE) %>%
   guides(color = "none") + 
   labs(x = "Effect on Log Odds of Success",
        y = "Independent Variable",
-       title = "Coefficient Plot for Logistic Regression on Success of Campaign") + 
+       title = "Coefficient Plot for Logistic Regression \n on Success of Campaign") + 
   theme_minimal() + 
   scale_color_manual(values=mycolors)
 ```

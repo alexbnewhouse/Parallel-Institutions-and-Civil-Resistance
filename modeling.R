@@ -180,6 +180,7 @@ model_random <- plm(length_camp ~ log(gdppc) + colony + prim_meth + sec_defect +
                       prim_meth * pi_education + prim_meth * pi_soc_welfare +
                       prim_meth * pi_trad_media + prim_meth * pi_new_media + prim_meth * pi_courts + prim_meth * pi_police, data = agg_df, index = "loc_cow", model="random")
 
+summary(model_random)
 
 model2 <- glm(end_status ~ length_camp + log(gdppc) + colony + prim_meth + sec_defect + repression + in_media + indiscrim + camp_support + camp_size + regime_support + sdirect + 
                 pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect + prim_meth * pi_education + prim_meth * pi_soc_welfare +
@@ -220,7 +221,7 @@ broom::tidy(model2, conf.int = TRUE) %>%
   guides(color = "none") + 
   labs(x = "Effect on Log Odds of Success",
        y = "Independent Variable",
-       title = "Coefficient Plot for Logistic Regression on Success of Campaign") + 
+       title = "Coefficient Plot for Logistic Regression \\on Success of Campaign") + 
   theme_minimal() + 
   scale_color_manual(values=mycolors)
 
