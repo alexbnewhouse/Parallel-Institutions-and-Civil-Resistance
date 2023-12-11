@@ -109,13 +109,3 @@ Condition:
   significant positive effects on success rates. International support
   of the regime and repression of the campaign have significant negative
   impacts.
-
-<object data="https://viewscreen.githubusercontent.com/view/pdf?browser=safari&amp;bypass_fastly=true&amp;color_mode=auto&amp;commit=51f5f63577b2e7a4792efd6296429dd217718158&amp;device=unknown_device&amp;docs_host=https%3A%2F%2Fdocs.github.com&amp;enc_url=68747470733a2f2f7261772e67697468756275736572636f6e74656e742e636f6d2f616c6578626e6577686f7573652f506172616c6c656c2d496e737469747574696f6e732d616e642d436976696c2d526573697374616e63652f353166356636333537376232653761343739326566643632393634323964643231373731383135382f4e6577686f7573655f446174613146696e616c506f737465722e706466&amp;logged_in=true&amp;nwo=alexbnewhouse%2FParallel-Institutions-and-Civil-Resistance&amp;path=Newhouse_Data1FinalPoster.pdf" type="application/pdf" width="700px" height="700px">
-<embed src="https://viewscreen.githubusercontent.com/view/pdf?browser=safari&amp;bypass_fastly=true&amp;color_mode=auto&amp;commit=51f5f63577b2e7a4792efd6296429dd217718158&amp;device=unknown_device&amp;docs_host=https%3A%2F%2Fdocs.github.com&amp;enc_url=68747470733a2f2f7261772e67697468756275736572636f6e74656e742e636f6d2f616c6578626e6577686f7573652f506172616c6c656c2d496e737469747574696f6e732d616e642d436976696c2d526573697374616e63652f353166356636333537376232653761343739326566643632393634323964643231373731383135382f4e6577686f7573655f446174613146696e616c506f737465722e706466&amp;logged_in=true&amp;nwo=alexbnewhouse%2FParallel-Institutions-and-Civil-Resistance&amp;path=Newhouse_Data1FinalPoster.pdf">
-<p>
-This browser does not support PDFs. Please download the PDF to view it:
-<a href="https://viewscreen.githubusercontent.com/view/pdf?browser=safari&bypass_fastly=true&color_mode=auto&commit=51f5f63577b2e7a4792efd6296429dd217718158&device=unknown_device&docs_host=https%3A%2F%2Fdocs.github.com&enc_url=68747470733a2f2f7261772e67697468756275736572636f6e74656e742e636f6d2f616c6578626e6577686f7573652f506172616c6c656c2d496e737469747574696f6e732d616e642d436976696c2d526573697374616e63652f353166356636333537376232653761343739326566643632393634323964643231373731383135382f4e6577686f7573655f446174613146696e616c506f737465722e706466&logged_in=true&nwo=alexbnewhouse%2FParallel-Institutions-and-Civil-Resistance&path=Newhouse_Data1FinalPoster.pdf">Download
-PDF</a>.
-</p>
-</embed>
-</object>
