@@ -22,6 +22,23 @@ based on the violence of a campaign.
   education systems, while nonviolent campaigns are benefitted by social
   welfare systems.
 
+### Dependent and Independent Variables
+
+**DV**: Campaign length; campaign success or failure.
+
+**IV**: Parallel institutions:
+
+- Law Enforcement
+- Education
+- Social Welfare
+- Traditional Media
+- New Media
+- Courts
+
+Condition:
+
+- Violence or nonviolence of campaign
+
 ### Methods
 
 - Random Effects Linear Regression: Campaign Length vs. Parallel
