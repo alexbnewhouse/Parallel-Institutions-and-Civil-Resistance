@@ -12,6 +12,16 @@ survival analysis, I show that education and social welfare institutions
 can help campaigns achieve their goals, but that this effect diverges
 based on the violence of a campaign.
 
+### Hypotheses
+
+- **Hypothesis 1**: Social welfare and educational institutions help
+  political resistance campaigns achieve their goals.
+- **Hypothesis 2**: Campaigns with traditional or new media systems last
+  longer and have higher rates of success than those without.
+- **Hypothesis 3**: Violent campaigns are benefitted by building
+  education systems, while nonviolent campaigns are benefitted by social
+  welfare systems.
+
 ### Variable Characteristics
 
 ![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
