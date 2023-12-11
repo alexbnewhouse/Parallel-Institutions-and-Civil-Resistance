@@ -189,7 +189,7 @@ agg_df %>%
 
 ### Longevity Models
 
-```{r, results='asis'}
+```{r}
 library(plm)
 model1 <- plm(length_camp ~ log(gdppc) + colony + prim_meth + sec_defect + repression + in_media + indiscrim + camp_support + camp_size + regime_support + sdirect + 
                 pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect + 
@@ -227,7 +227,7 @@ broom::tidy(model1, conf.int = TRUE) %>%
   guides(color = "none") + 
   labs(x = "Effect on Log Odds of Success",
        y = "Independent Variable",
-       title = "Coefficient Plot for Random Effects Linear Regression \n on Length of Campaign") + 
+       title = "Coefficient Plot for Random Effects \n Linear Regression on Length of Campaign") + 
   theme_minimal() + 
   scale_color_manual(values=mycolors)
 
