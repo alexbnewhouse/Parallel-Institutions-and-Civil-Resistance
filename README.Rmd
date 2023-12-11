@@ -15,6 +15,13 @@ What is the impact of parallel institution-building on non-state actors’ strat
 * **Hypothesis 2**: Campaigns with traditional or new media systems last longer and have higher rates of success than those without.
 * **Hypothesis 3**: Violent campaigns are benefitted by building education systems, while nonviolent campaigns are benefitted by social welfare systems.
 
+### Methods
+
+* Random Effects Linear Regression: Campaign Length vs. Parallel Institutions
+* Binomial Logistic Regression: Campaign Success vs. Parallel Institutions
+* Multinomial Logistic Regression: Campaign Success OR Failure vs. Parallel Institutions
+* Competing Risks Survival Analysis: Campaign Success Hazard Rates on Parallel Institutions, with Failure as Competing Event
+
 ### Variable Characteristics
 
 ```{r}

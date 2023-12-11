@@ -22,6 +22,17 @@ based on the violence of a campaign.
   education systems, while nonviolent campaigns are benefitted by social
   welfare systems.
 
+### Methods
+
+- Random Effects Linear Regression: Campaign Length vs. Parallel
+  Institutions
+- Binomial Logistic Regression: Campaign Success vs. Parallel
+  Institutions
+- Multinomial Logistic Regression: Campaign Success OR Failure
+  vs. Parallel Institutions
+- Competing Risks Survival Analysis: Campaign Success Hazard Rates on
+  Parallel Institutions, with Failure as Competing Event
+
 ### Variable Characteristics
 
 ![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
