@@ -12,6 +12,9 @@ survival analysis, I show that education and social welfare institutions
 can help campaigns achieve their goals, but that this effect diverges
 based on the violence of a campaign.
 
+- [Hypotheses](#Hypotheses)
+- [DVs and IVs](#Dependent-and-Independent-Variables)
+
 ### Hypotheses
 
 - **Hypothesis 1**: Social welfare and educational institutions help
