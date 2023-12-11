@@ -7,7 +7,7 @@ Parallel Institutions and Civil Resistance
 
 ### Longevity Models
 
-$$
+```math
 \begin{table}[!htbp] \centering 
   \caption{} 
   \label{} 
@@ -100,7 +100,7 @@ F Statistic & 88.379$^{***}$ \\
 \textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
 \end{tabular} 
 \end{table} 
-$$
+```
 
 ### Binomial Logistic Regression
 
