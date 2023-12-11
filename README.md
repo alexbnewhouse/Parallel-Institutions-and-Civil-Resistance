@@ -1,1 +1,1 @@
-# Parallel-Institutions-and-Civil-Resistance
+# Parallel Institutions and Civil Resistance
