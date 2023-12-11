@@ -189,17 +189,199 @@ agg_df %>%
 
 ### Longevity Models
 
-```{r}
+```{r, results='asis'}
 library(plm)
 model1 <- plm(length_camp ~ log(gdppc) + colony + prim_meth + sec_defect + repression + in_media + indiscrim + camp_support + camp_size + regime_support + sdirect + 
                 pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect + 
                 prim_meth * pi_education + prim_meth * pi_soc_welfare +
                 prim_meth * pi_trad_media + prim_meth * pi_new_media + prim_meth * pi_courts + prim_meth * pi_police, data = agg_df, index = "loc_cow", model="random")
 
-library(stargazer)
-
-stargazer::stargazer(model1, type = "html", covariate.labels = c("Log(GDP Per Capita)", "Past or Present Colony", "Violent of Campaign", "Security Force Defections", "Repression of Campaign", "Media Coverage", "Indiscriminate Violence by Regime", "Campaign Support", "Campaign Size", "Regime Support of Campaign", "International Sanctions of Regime", "Educational Systems", "Law Enforcement", "Social Welfare", "Traditional Media", "New Media", "Judicial System", "Violence * Education", "Violence * Social Welfare", "Violence * Traditional Media", "Violence * New Media", "Violence * Courts", "Violence * Police"))
 ```
 
+$$
+\begin{table}[!htbp] \centering 
+  \caption{} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{1}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-2} 
+\\[-1.8ex] & length\_camp \\ 
+\hline \\[-1.8ex] 
+ Log(GDP Per Capita) & $-$0.331 \\ 
+  & (0.646) \\ 
+  & \\ 
+ Past or Present Colony & 1.250 \\ 
+  & (1.257) \\ 
+  & \\ 
+ Violent of Campaign & 3.314$^{*}$ \\ 
+  & (1.702) \\ 
+  & \\ 
+ Security Force Defections & $-$2.457$^{*}$ \\ 
+  & (1.389) \\ 
+  & \\ 
+ Repression of Campaign & 0.742 \\ 
+  & (0.898) \\ 
+  & \\ 
+ Media Coverage & $-$2.248$^{**}$ \\ 
+  & (0.878) \\ 
+  & \\ 
+ Indiscriminate Violence by Regime & $-$2.553$^{*}$ \\ 
+  & (1.303) \\ 
+  & \\ 
+ Campaign Support & $-$1.059 \\ 
+  & (1.312) \\ 
+  & \\ 
+ Campaign Size & $-$0.088 \\ 
+  & (0.614) \\ 
+  & \\ 
+ Regime Support of Campaign & $-$3.194$^{***}$ \\ 
+  & (1.182) \\ 
+  & \\ 
+ International Sanctions of Regime & 0.707 \\ 
+  & (1.726) \\ 
+  & \\ 
+ Educational Systems & 3.557 \\ 
+  & (6.347) \\ 
+  & \\ 
+ Law Enforcement & 1.306 \\ 
+  & (9.172) \\ 
+  & \\ 
+ Social Welfare & $-$0.635 \\ 
+  & (2.138) \\ 
+  & \\ 
+ Traditional Media & 1.773 \\ 
+  & (2.219) \\ 
+  & \\ 
+ New Media & $-$0.235 \\ 
+  & (4.937) \\ 
+  & \\ 
+ Judicial System & 2.948 \\ 
+  & (3.989) \\ 
+  & \\ 
+ Violence * Education & $-$10.701 \\ 
+  & (7.537) \\ 
+  & \\ 
+ Violence * Social Welfare & 9.919$^{*}$ \\ 
+  & (5.565) \\ 
+  & \\ 
+ Violence * Traditional Media & 2.591 \\ 
+  & (3.020) \\ 
+  & \\ 
+ Violence * New Media & 9.008 \\ 
+  & (5.781) \\ 
+  & \\ 
+ Violence * Courts & $-$0.191 \\ 
+  & (4.542) \\ 
+  & \\ 
+ Violence * Police & $-$4.690 \\ 
+  & (9.955) \\ 
+  & \\ 
+ Constant & 8.572 \\ 
+  & (6.111) \\ 
+  & \\ 
+\hline \\[-1.8ex] 
+Observations & 178 \\ 
+R$^{2}$ & 0.363 \\ 
+Adjusted R$^{2}$ & 0.268 \\ 
+F Statistic & 88.379$^{***}$ \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+$$
 
+### Binomial Logistic Regression
+
+```{r}
+model2 <- glm(end_status ~ length_camp + log(gdppc) + colony + prim_meth + sec_defect + repression + in_media + indiscrim + camp_support + camp_size + regime_support + sdirect + 
+                pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect + prim_meth * pi_education + prim_meth * pi_soc_welfare +
+                prim_meth * pi_trad_media + prim_meth * pi_new_media + prim_meth * pi_courts + prim_meth * pi_police, data = agg_df, family = "binomial")
+
+library(RColorBrewer)
+nb.cols <- 25
+mycolors <- colorRampPalette(brewer.pal(8, "Dark2"))(nb.cols)
+
+broom::tidy(model2, conf.int = TRUE) %>% 
+  mutate(term = case_when(term == "sec_defect" ~ "Security Force Defections",
+                          term == "repression" ~ "Repression",
+                          term == "regime_support" ~ "Regime Support for Campaign", 
+                          term == "prim_meth" ~ "Violent Campaign",
+                          term == "in_media" ~ "Media Coverage of Campaign",
+                          term == "log(gdppc)" ~ "Log(GDP Per Capita)",
+                          term == "indiscrim" ~ "Indiscriminate Violence Against Campaign",
+                          term == "camp_support" ~ "Campaign Support",
+                          term == "camp_size" ~ "Campaign Size",
+                          term == "pi_education" ~ "Parallel Education",
+                          term == "pi_police" ~ "Parallel Law Enforcement",
+                          term == "pi_trad_media" ~ "Parallel Traditional Media",
+                          term == "pi_new_media" ~ "Parallel New Media",
+                          term == "pi_soc_welfare" ~ "Parallel Social Welfare",
+                          term == "pi_courts" ~ "Parallel Judicial System",
+                          term == "sdirect" ~ "Sanctions Against Regime",
+                          term == "length_camp" ~ "Campaign Length",
+                          term == "colony" ~ "Past Colonial History",
+                          TRUE ~ term)) %>%
+  ggplot(aes(estimate, term, xmin = conf.low, xmax = conf.high, height = 0, color = term)) +
+  geom_point() +
+  geom_vline(xintercept = 0, lty = 4) +
+  geom_errorbarh() +
+  guides(color = "none") + 
+  labs(x = "Effect on Log Odds of Success",
+       y = "Independent Variable",
+       title = "Coefficient Plot for Logistic Regression on Success of Campaign") + 
+  theme_minimal() + 
+  scale_color_manual(values=mycolors)
+```
+
+### Multinomial Logistic Regression
+
+```{r}
+library(nnet)
+df$end_status <- as.factor(df$end_status)
+df$colony_bool <- as.factor(df$colony_bool)
+mn_mod <- multinom(end_status ~ log(gdppc) + colony_bool + years_active + prim_meth + repression + in_media + indiscrim + sdirect +
+                     camp_support + camp_size + regime_support + pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect + 
+                     prim_meth * pi_trad_media + prim_meth * pi_new_media + prim_meth * pi_courts + prim_meth * pi_education + prim_meth * pi_police + prim_meth * pi_soc_welfare, data = df, family = "multinomial")
+
+
+
+library(interactions)
+library(ggstance)
+tt <- broom::tidy(mn_mod,conf.int=TRUE)
+tt <- tt %>% 
+  filter(term!="(Intercept)")  %>% 
+  filter(term!="prim_meth1:pi_police1")
+
+tt %>% 
+  #filter(!term %in% c("repression", "indiscrim", "sdirect", "camp_support", "years_active", "sec_defect", "regime_support", "in_media", "colony_boolTRUE", "log(gdppc)", "camp_size")) %>%  
+  mutate(term = case_when(term == "prim_meth1" ~ "Violent Campaign",
+                          term == "pi_education1" ~ "Parallel Education",
+                          term == "pi_police1" ~ "Parallel Law Enforcement",
+                          term == "pi_trad_media1" ~ "Parallel Traditional Media",
+                          term == "pi_new_media1" ~ "Parallel New Media",
+                          term == "pi_soc_welfare1" ~ "Parallel Social Welfare",
+                          term == "pi_courts1" ~ "Parallel Judicial System",
+                          term == "sdirect1" ~ "Sanctions Against Regime",
+                          term == "prim_meth1:pi_trad_media1" ~ "Violent Campaign * Traditional Media",
+                          term == "prim_meth1:pi_new_media1" ~ "Violent Campaign * New Media",
+                          term == "prim_meth1:pi_courts1" ~ "Violent Campaign * Judicial System",
+                          term == "prim_meth1:pi_education1" ~ "Violent Campaign * Education",
+                          term == "prim_meth1:pi_soc_welfare1" ~ "Violent Campaign * Social Welfare",
+                          term == "prim_meth1:pi_police1" ~ "Violent Campaign * Law Enforcement",
+                          TRUE ~ term)) %>%
+  mutate(y.level = case_when(y.level == 2 ~ "Success",
+                             y.level == 1 ~ "Failure")) %>%
+  ggplot(aes(estimate, term, xmin = conf.low, xmax = conf.high, height = 0, color = y.level)) +
+  ggstance::geom_pointrangeh(position=position_dodgev(height=0.75)) +
+  geom_vline(xintercept = 0, lty = 4) +
+  ggstance::geom_errorbarh(position=position_dodgev(height=0.75)) +
+  labs(x = "Effect on Outcome Rate",
+       y = "Independent Variable",
+       title = "Coefficient Plot for Multinomial Logit/Competing Risks",
+       color = "Outcome") + 
+  theme_minimal() 
+```
 
