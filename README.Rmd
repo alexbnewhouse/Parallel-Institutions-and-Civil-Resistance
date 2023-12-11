@@ -187,4 +187,19 @@ agg_df %>%
 
 ```
 
+### Longevity Models
+
+```{r}
+library(plm)
+model1 <- plm(length_camp ~ log(gdppc) + colony + prim_meth + sec_defect + repression + in_media + indiscrim + camp_support + camp_size + regime_support + sdirect + 
+                pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect + 
+                prim_meth * pi_education + prim_meth * pi_soc_welfare +
+                prim_meth * pi_trad_media + prim_meth * pi_new_media + prim_meth * pi_courts + prim_meth * pi_police, data = agg_df, index = "loc_cow", model="random")
+
+library(stargazer)
+
+stargazer::stargazer(model1, type = "html", covariate.labels = c("Log(GDP Per Capita)", "Past or Present Colony", "Violent of Campaign", "Security Force Defections", "Repression of Campaign", "Media Coverage", "Indiscriminate Violence by Regime", "Campaign Support", "Campaign Size", "Regime Support of Campaign", "International Sanctions of Regime", "Educational Systems", "Law Enforcement", "Social Welfare", "Traditional Media", "New Media", "Judicial System", "Violence * Education", "Violence * Social Welfare", "Violence * Traditional Media", "Violence * New Media", "Violence * Courts", "Violence * Police"))
+```
+
+
 
