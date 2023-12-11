@@ -1,6 +1,17 @@
 Parallel Institutions and Civil Resistance
 ================
 
+What is the impact of parallel institution-building on non-state actors’
+strategic campaigns? Non-state campaigns, both violent and nonviolent,
+occasionally attempt to develop independent institutions for the
+provision of public goods and services and for the execution of
+political tasks. In this paper, I employ the Nonviolent and Violent
+Campaign Outcomes 2.1 (NAVCO) dataset to measure how building parallel
+institutions affects the longevity and success rates of campaigns. Using
+survival analysis, I show that education and social welfare institutions
+can help campaigns achieve their goals, but that this effect diverges
+based on the violence of a campaign.
+
 ### Variable Characteristics
 
 ![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
