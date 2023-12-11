@@ -14,6 +14,12 @@ based on the violence of a campaign.
 
 - [Hypotheses](#Hypotheses)
 - [DVs and IVs](#Dependent-and-Independent-Variables)
+- [Methods](#Methods)
+- [Variable Characteristics](#Variable-Characteristics)
+- [Longevity Models](#Longevity-Models)
+- [Binomial Logistic Regression](#Binomial-Logistic-Regression)
+- [Multinomial Logistic Regression](#Multinomial-Logistic-Regression)
+- [Results](#Results)
 
 ### Hypotheses
 
