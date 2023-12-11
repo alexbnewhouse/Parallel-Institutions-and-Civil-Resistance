@@ -7,100 +7,87 @@ Parallel Institutions and Civil Resistance
 
 ### Longevity Models
 
-```math
-\begin{table}[!htbp] \centering 
-  \caption{} 
-  \label{} 
-\begin{tabular}{@{\extracolsep{5pt}}lc} 
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
- & \multicolumn{1}{c}{\textit{Dependent variable:}} \\ 
-\cline{2-2} 
-\\[-1.8ex] & length\_camp \\ 
-\hline \\[-1.8ex] 
- Log(GDP Per Capita) & $-$0.331 \\ 
-  & (0.646) \\ 
-  & \\ 
- Past or Present Colony & 1.250 \\ 
-  & (1.257) \\ 
-  & \\ 
- Violent of Campaign & 3.314$^{*}$ \\ 
-  & (1.702) \\ 
-  & \\ 
- Security Force Defections & $-$2.457$^{*}$ \\ 
-  & (1.389) \\ 
-  & \\ 
- Repression of Campaign & 0.742 \\ 
-  & (0.898) \\ 
-  & \\ 
- Media Coverage & $-$2.248$^{**}$ \\ 
-  & (0.878) \\ 
-  & \\ 
- Indiscriminate Violence by Regime & $-$2.553$^{*}$ \\ 
-  & (1.303) \\ 
-  & \\ 
- Campaign Support & $-$1.059 \\ 
-  & (1.312) \\ 
-  & \\ 
- Campaign Size & $-$0.088 \\ 
-  & (0.614) \\ 
-  & \\ 
- Regime Support of Campaign & $-$3.194$^{***}$ \\ 
-  & (1.182) \\ 
-  & \\ 
- International Sanctions of Regime & 0.707 \\ 
-  & (1.726) \\ 
-  & \\ 
- Educational Systems & 3.557 \\ 
-  & (6.347) \\ 
-  & \\ 
- Law Enforcement & 1.306 \\ 
-  & (9.172) \\ 
-  & \\ 
- Social Welfare & $-$0.635 \\ 
-  & (2.138) \\ 
-  & \\ 
- Traditional Media & 1.773 \\ 
-  & (2.219) \\ 
-  & \\ 
- New Media & $-$0.235 \\ 
-  & (4.937) \\ 
-  & \\ 
- Judicial System & 2.948 \\ 
-  & (3.989) \\ 
-  & \\ 
- Violence * Education & $-$10.701 \\ 
-  & (7.537) \\ 
-  & \\ 
- Violence * Social Welfare & 9.919$^{*}$ \\ 
-  & (5.565) \\ 
-  & \\ 
- Violence * Traditional Media & 2.591 \\ 
-  & (3.020) \\ 
-  & \\ 
- Violence * New Media & 9.008 \\ 
-  & (5.781) \\ 
-  & \\ 
- Violence * Courts & $-$0.191 \\ 
-  & (4.542) \\ 
-  & \\ 
- Violence * Police & $-$4.690 \\ 
-  & (9.955) \\ 
-  & \\ 
- Constant & 8.572 \\ 
-  & (6.111) \\ 
-  & \\ 
-\hline \\[-1.8ex] 
-Observations & 178 \\ 
-R$^{2}$ & 0.363 \\ 
-Adjusted R$^{2}$ & 0.268 \\ 
-F Statistic & 88.379$^{***}$ \\ 
-\hline 
-\hline \\[-1.8ex] 
-\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
-\end{tabular} 
-\end{table} 
-```
+<table style="text-align:center"><tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"></td><td><em>Dependent variable:</em></td></tr>
+<tr><td></td><td colspan="1" style="border-bottom: 1px solid black"></td></tr>
+<tr><td style="text-align:left"></td><td>length_camp</td></tr>
+<tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left">Log(GDP Per Capita)</td><td>-0.331</td></tr>
+<tr><td style="text-align:left"></td><td>(0.646)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">Past or Present Colony</td><td>1.250</td></tr>
+<tr><td style="text-align:left"></td><td>(1.257)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">Violent of Campaign</td><td>3.314<sup>*</sup></td></tr>
+<tr><td style="text-align:left"></td><td>(1.702)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">Security Force Defections</td><td>-2.457<sup>*</sup></td></tr>
+<tr><td style="text-align:left"></td><td>(1.389)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">Repression of Campaign</td><td>0.742</td></tr>
+<tr><td style="text-align:left"></td><td>(0.898)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">Media Coverage</td><td>-2.248<sup>**</sup></td></tr>
+<tr><td style="text-align:left"></td><td>(0.878)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">Indiscriminate Violence by Regime</td><td>-2.553<sup>*</sup></td></tr>
+<tr><td style="text-align:left"></td><td>(1.303)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">Campaign Support</td><td>-1.059</td></tr>
+<tr><td style="text-align:left"></td><td>(1.312)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">Campaign Size</td><td>-0.088</td></tr>
+<tr><td style="text-align:left"></td><td>(0.614)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">Regime Support of Campaign</td><td>-3.194<sup>***</sup></td></tr>
+<tr><td style="text-align:left"></td><td>(1.182)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">International Sanctions of Regime</td><td>0.707</td></tr>
+<tr><td style="text-align:left"></td><td>(1.726)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">Educational Systems</td><td>3.557</td></tr>
+<tr><td style="text-align:left"></td><td>(6.347)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">Law Enforcement</td><td>1.306</td></tr>
+<tr><td style="text-align:left"></td><td>(9.172)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">Social Welfare</td><td>-0.635</td></tr>
+<tr><td style="text-align:left"></td><td>(2.138)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">Traditional Media</td><td>1.773</td></tr>
+<tr><td style="text-align:left"></td><td>(2.219)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">New Media</td><td>-0.235</td></tr>
+<tr><td style="text-align:left"></td><td>(4.937)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">Judicial System</td><td>2.948</td></tr>
+<tr><td style="text-align:left"></td><td>(3.989)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">Violence * Education</td><td>-10.701</td></tr>
+<tr><td style="text-align:left"></td><td>(7.537)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">Violence * Social Welfare</td><td>9.919<sup>*</sup></td></tr>
+<tr><td style="text-align:left"></td><td>(5.565)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">Violence * Traditional Media</td><td>2.591</td></tr>
+<tr><td style="text-align:left"></td><td>(3.020)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">Violence * New Media</td><td>9.008</td></tr>
+<tr><td style="text-align:left"></td><td>(5.781)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">Violence * Courts</td><td>-0.191</td></tr>
+<tr><td style="text-align:left"></td><td>(4.542)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">Violence * Police</td><td>-4.690</td></tr>
+<tr><td style="text-align:left"></td><td>(9.955)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">Constant</td><td>8.572</td></tr>
+<tr><td style="text-align:left"></td><td>(6.111)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left">Observations</td><td>178</td></tr>
+<tr><td style="text-align:left">R<sup>2</sup></td><td>0.363</td></tr>
+<tr><td style="text-align:left">Adjusted R<sup>2</sup></td><td>0.268</td></tr>
+<tr><td style="text-align:left">F Statistic</td><td>88.379<sup>***</sup></td></tr>
+<tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"><em>Note:</em></td><td style="text-align:right"><sup>*</sup>p<0.1; <sup>**</sup>p<0.05; <sup>***</sup>p<0.01</td></tr>
+</table>
 
 ### Binomial Logistic Regression
 
