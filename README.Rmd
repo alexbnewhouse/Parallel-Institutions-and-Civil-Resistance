@@ -356,4 +356,18 @@ tt %>%
        color = "Outcome") + 
   theme_minimal() 
 ```
+  
+### Results
+
+#### Campaign Length
+
+* No independent variable of interest has a clear impact on campaign length; educational institutions _may_ have a slight conditional effect with the violence of the campaign.
+* Media coverage shortens campaigns.
+
+#### Campaign Success 
+
+* Across all model specifications, education and social welfare have the strongest effects on success rates. 
+* Both competing risks and multinomial logit show that violent campaigns are harmed by building social welfare systems and helped by building educational systems.
+  * These results are significant at least at the .1 level in the competing risks regression. 
+* I replicate previous findings that nonviolent tactics, security force defections, campaign size, and campaign support from the regime have significant positive effects on success rates. International support of the regime and repression of the campaign have significant negative impacts.
 
