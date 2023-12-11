@@ -1,0 +1,190 @@
+---
+title: "Parallel Institutions and Civil Resistance"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+### Variable Characteristics
+
+```{r}
+library(tidyverse)
+library(haven)
+colonies <- read_csv("COLDAT_colonies.csv")
+df <- haven::read_dta("NAVCO2-1_ForPublication.dta") 
+gdp <- readxl::read_xlsx("mpd2020.xlsx", sheet = "Full data" )
+
+gdp_wb <- read_csv("worldbank_gdp.csv") %>% 
+  select(Year, PNG_2011, MDV_2011) %>% 
+  pivot_longer(cols = c(PNG_2011, MDV_2011), names_to = "country", values_to = "gdppc") %>% 
+  mutate(loc_cow = case_when(country == "PNG_2011" ~ 910,
+                             country == "MDV_2011" ~ 781)) %>% 
+  select(-country, year = Year)
+
+
+df <- df %>% 
+  mutate(across(starts_with("pi_"), ~ case_when(. >= 0 ~ .,
+                                                . < 0 ~ NA)))
+df <- df %>% 
+  mutate(in_media = na_if(in_media, -99)) %>% 
+  mutate(repression = na_if(repression, -99)) %>% 
+  mutate(camp_support = na_if(camp_support, -99)) %>% 
+  mutate(camp_size = na_if(camp_size, -99)) %>% 
+  mutate(regime_support = na_if(regime_support, -99)) %>% 
+  mutate(indiscrim = na_if(indiscrim, -99)) %>% 
+  mutate(prim_meth = na_if(prim_meth, -99)) %>% 
+  mutate(sec_defect = na_if(sec_defect, -99)) %>% 
+  mutate(sdirect = na_if(sdirect, -99)) %>% 
+  mutate(prim_meth = case_when(prim_meth == 0 ~ 1,
+                               TRUE ~ 0))
+
+df <- df %>% mutate(cyearplus = cyear + 1)
+
+df %>% 
+  group_by(id) %>% 
+  mutate(final_year = case_when(cyear == max(cyear) ~ 1,
+                                TRUE ~ 0)) %>% 
+  ungroup() -> df
+
+df <- df %>% 
+  group_by(id) %>% 
+  mutate(years_active = row_number()) 
+
+df <- df %>%
+  mutate(years_plus = years_active + 1)
+
+df <- df %>% 
+  mutate(end_status = case_when(success == 1 ~ 2,
+                                (success == 0 & final_year == 1) ~ 1,
+                                TRUE ~ 0)) 
+
+
+gdp <- gdp %>%
+  mutate(loc_cow = countrycode::countrycode(countrycode, origin = "iso3c", destination = "cown"))
+
+gdp <- gdp %>% 
+  mutate(loc_cow = case_when(countrycode == "CSK" ~ 315,
+                             countrycode == "HKG" ~ 997,
+                             countrycode == "PSE" ~ 666,
+                             countrycode == "SRB" ~ 345,
+                             countrycode == "SUN" ~ 365,
+                             countrycode == "YUG" ~ 345,
+                             TRUE ~ loc_cow))
+
+gdp <- gdp %>% 
+  select(loc_cow, year, gdppc)
+
+gdp <- gdp %>% 
+  group_by(loc_cow, year) %>% 
+  summarize(gdppc = sum(gdppc))
+
+df <- df %>% 
+  left_join(gdp, by = c("loc_cow", "year"))
+
+
+
+colonies %>% 
+  pivot_longer(cols = ends_with("_max"), names_to = "colonizer", values_to = "start_year", names_repair = "unique") %>% 
+  select(country, colonizer, start_year) %>% 
+  arrange(country, colonizer) %>% 
+  filter(!is.na(start_year)) -> colonies_long
+
+
+colonies_long %>% 
+  rename(year = start_year) %>%
+  mutate(colonizer_name = str_extract(colonizer, "(?<=[a-z]{1,16}\\.).*(?=\\_max)")) %>%
+  mutate(start_year = case_when(grepl("colstart", colonizer) ~ year)) %>% 
+  mutate(end_year = case_when(grepl("colend", colonizer) ~ year)) %>% 
+  group_by(country, colonizer_name) %>% 
+  summarize(start_year = mean(start_year, na.rm = TRUE), end_year = mean(end_year, na.rm = TRUE)) -> colonies_long
+
+
+colonies_long$year <- mapply(seq,colonies_long$start_year,colonies_long$end_year,SIMPLIFY=FALSE)
+
+colonies_long %>% 
+  unnest(year) %>% 
+  select(-start_year, -end_year) %>% 
+  mutate(colony = countrycode::countrycode(colonizer_name, origin = "country.name", destination = "cown")) -> colonies_long 
+
+colonies_long <- colonies_long %>% 
+  mutate(cown = countrycode::countrycode(country, origin = "country.name", destination = "cown")) 
+
+df <- df %>% 
+  left_join(colonies_long %>% select(-country, -colonizer_name), by = c("year" = "year", "loc_cow" = "cown"))
+
+df <- df %>% 
+  mutate(colony = case_when(is.na(colony) ~ 0,
+                            TRUE ~ colony)) 
+
+
+
+
+
+colony_boolean <- colonies_long %>% 
+  distinct(cown) %>% 
+  mutate(colony_bool = TRUE)
+
+df <- df %>% 
+  left_join(colony_boolean %>% select(cown, colony_bool), by = c("loc_cow" = "cown")) %>% 
+  mutate(colony_bool = case_when(is.na(colony_bool) ~ FALSE,
+                                 TRUE ~ colony_bool))
+
+polity <- readxl::read_xls("p5v2018.xls")
+
+polity <- polity %>% 
+  mutate(polity = case_when(polity < -10 ~ NA,
+                            TRUE ~ polity))
+
+polity <- polity %>% 
+  mutate(cown = countrycode::countrycode(country, origin = "country.name", destination = "cown")) %>%
+  mutate(cown = case_when(grepl("serbia", country, ignore.case = TRUE) ~ 345,
+                          TRUE ~ cown))
+
+
+
+xrcomp <- polity %>% 
+  select(country, year, xrcomp) %>% 
+  mutate(cown = countrycode::countrycode(country, origin = "country.name", destination = "cown")) %>%
+  mutate(cown = case_when(grepl("serbia", country, ignore.case = TRUE) ~ 345,
+                          TRUE ~ cown)) %>% 
+  select(cown, year, xrcomp)
+
+df <- df %>% 
+  left_join(xrcomp, by = c("loc_cow" = "cown", "year"="year"))
+
+df <- df %>% distinct() 
+
+df <- df %>% 
+  mutate(colony = factor(colony, ordered = FALSE)) %>% 
+  mutate(colony = relevel(colony, ref = "0"))
+```
+
+```{r}
+
+agg_df <- df %>% 
+  group_by(camp_name) %>% 
+  summarise(end_status = max(end_status), loc_cow = max(loc_cow),  repression = mean(repression), length_camp = n(), success = max(success), regime_support = round(median(regime_support)), 
+            camp_support = round(median(camp_support)), camp_size = round(median(camp_size)), pi_armed_wing = mean(pi_armed_wing), pi_police = mean(pi_police), pi_education = mean(pi_education), 
+            pi_soc_welfare = mean(pi_soc_welfare), pi_trad_media = mean(pi_trad_media), pi_new_media = mean(pi_new_media), pi_courts = mean(pi_courts),
+            colony = max(colony_bool), gdppc = mean(gdppc), prim_meth = mean(prim_meth), sec_defect = mean(sec_defect), xrcomp = mean(xrcomp), in_media = mean(in_media), indiscrim = mean(indiscrim), sdirect = mean(sdirect))
+
+agg_df <- agg_df %>%
+  drop_na() %>% 
+  mutate(loc_cow = factor(loc_cow)) %>% 
+  mutate(end_status = case_when(end_status == 2 ~ 1,
+                                TRUE ~ 0))
+
+agg_df %>% 
+  ggplot() +
+  geom_histogram(aes(x = length_camp), fill = "navy") + 
+  labs(
+    x = "Length of Campaign in Years",
+    title = "Distribution of Campaign Lengths"
+  )
+  
+
+```
+
+

@@ -34,6 +34,26 @@ df <- df %>%
                              location == "Western Sahara" ~ 600, 
                              TRUE ~ loc_cow)) 
 
+df <- df %>% mutate(cyearplus = cyear + 1)
+
+df %>% 
+  group_by(id) %>% 
+  mutate(final_year = case_when(cyear == max(cyear) ~ 1,
+                                TRUE ~ 0)) %>% 
+  ungroup() -> df
+
+df <- df %>% 
+  group_by(id) %>% 
+  mutate(years_active = row_number()) 
+
+df <- df %>%
+  mutate(years_plus = years_active + 1)
+
+df <- df %>% 
+  mutate(end_status = case_when(success == 1 ~ 2,
+                                (success == 0 & final_year == 1) ~ 1,
+                                TRUE ~ 0)) 
+
 gdp <- gdp %>%
   mutate(loc_cow = countrycode::countrycode(countrycode, origin = "iso3c", destination = "cown"))
 
@@ -92,25 +112,7 @@ df <- df %>%
                             TRUE ~ colony)) 
 
 
-df <- df %>% mutate(cyearplus = cyear + 1)
 
-df %>% 
-  group_by(id) %>% 
-  mutate(final_year = case_when(cyear == max(cyear) ~ 1,
-                                TRUE ~ 0)) %>% 
-  ungroup() -> df
-
-df <- df %>% 
-  group_by(id) %>% 
-  mutate(years_active = row_number()) 
-
-df <- df %>%
-  mutate(years_plus = years_active + 1)
-
-df <- df %>% 
-  mutate(end_status = case_when(success == 1 ~ 2,
-                                (success == 0 & final_year == 1) ~ 1,
-                                TRUE ~ 0)) 
 
 
 colony_boolean <- colonies_long %>% 
