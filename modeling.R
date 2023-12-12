@@ -221,7 +221,7 @@ broom::tidy(model2, conf.int = TRUE) %>%
   guides(color = "none") + 
   labs(x = "Effect on Log Odds of Success",
        y = "Independent Variable",
-       title = "Coefficient Plot for Logistic Regression \\on Success of Campaign") + 
+       title = "Coefficient Plot for Logistic Regression \n on Success of Campaign") + 
   theme_minimal() + 
   scale_color_manual(values=mycolors)
 
@@ -258,9 +258,9 @@ model <- coxph(Surv(time = years_active, time2 = years_plus, event = success) ~ 
 
 model2 <- coxph(Surv(time = years_active, time2 = years_plus, event = end_status) ~ log(gdppc) + regime_support + camp_support + sec_defect + prim_meth + pi_armed_wing + pi_soc_welfare + pi_courts + pi_new_media + pi_trad_media + pi_education + pi_police + prim_meth * pi_soc_welfare + prim_meth * pi_education + prim_meth * pi_courts + prim_meth * pi_new_media + prim_meth * pi_trad_media + prim_meth * pi_police, data = just_failures, cluster = id)
 
-summary(model2)
+summary(model)
 
-stargazer::stargazer(model, model2, title = "Preliminary Cox Proportional Hazard Models with NAVCO Variables", header = FALSE)
+stargazer::stargazer(model, model2, type = "text", title = "Preliminary Cox Proportional Hazard Models with NAVCO Variables", header = FALSE)
 
 
 library(nnet)

@@ -19,6 +19,7 @@ based on the violence of a campaign.
 - [Longevity Models](#Longevity-Models)
 - [Binomial Logistic Regression](#Binomial-Logistic-Regression)
 - [Multinomial Logistic Regression](#Multinomial-Logistic-Regression)
+- [Proportional Hazard Models](#Proportional-Hazard-Models)
 - [Results](#Results)
 
 ### Hypotheses
@@ -85,6 +86,35 @@ Condition:
     ## converged
 
 ![](README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+### Proportional Hazard Models
+
+| term                     |    estimate | std.error |  statistic |   p.value |
+|:-------------------------|------------:|----------:|-----------:|----------:|
+| (Intercept)              |   8.5723690 | 6.1110952 |  1.4027550 | 0.1606899 |
+| log(gdppc)               |  -0.3313861 | 0.6461087 | -0.5128953 | 0.6080246 |
+| colony                   |   1.2496758 | 1.2574850 |  0.9937898 | 0.3203252 |
+| prim_meth                |   3.3143571 | 1.7020284 |  1.9472984 | 0.0514990 |
+| sec_defect               |  -2.4571498 | 1.3894180 | -1.7684742 | 0.0769817 |
+| repression               |   0.7420625 | 0.8975595 |  0.8267558 | 0.4083755 |
+| in_media                 |  -2.2476339 | 0.8779363 | -2.5601333 | 0.0104632 |
+| indiscrim                |  -2.5530272 | 1.3029846 | -1.9593688 | 0.0500696 |
+| camp_support             |  -1.0591112 | 1.3115756 | -0.8075106 | 0.4193724 |
+| camp_size                |  -0.0881601 | 0.6139894 | -0.1435857 | 0.8858276 |
+| regime_support           |  -3.1943939 | 1.1817516 | -2.7031010 | 0.0068696 |
+| sdirect                  |   0.7069433 | 1.7260638 |  0.4095696 | 0.6821217 |
+| pi_education             |   3.5572919 | 6.3471370 |  0.5604561 | 0.5751683 |
+| pi_police                |   1.3056433 | 9.1716378 |  0.1423566 | 0.8867983 |
+| pi_soc_welfare           |  -0.6345128 | 2.1378162 | -0.2968042 | 0.7666160 |
+| pi_trad_media            |   1.7727539 | 2.2185545 |  0.7990581 | 0.4242567 |
+| pi_new_media             |  -0.2350258 | 4.9374685 | -0.0476005 | 0.9620347 |
+| pi_courts                |   2.9477555 | 3.9890796 |  0.7389563 | 0.4599335 |
+| prim_meth:pi_education   | -10.7011588 | 7.5367108 | -1.4198712 | 0.1556452 |
+| prim_meth:pi_soc_welfare |   9.9191908 | 5.5645314 |  1.7825743 | 0.0746556 |
+| prim_meth:pi_trad_media  |   2.5912823 | 3.0197197 |  0.8581201 | 0.3908261 |
+| prim_meth:pi_new_media   |   9.0076328 | 5.7808834 |  1.5581758 | 0.1191916 |
+| prim_meth:pi_courts      |  -0.1905214 | 4.5415416 | -0.0419508 | 0.9665379 |
+| prim_meth:pi_police      |  -4.6898528 | 9.9552251 | -0.4710946 | 0.6375732 |
 
 ### Results
 
