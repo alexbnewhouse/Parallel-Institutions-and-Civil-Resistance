@@ -16,7 +16,7 @@ stcrreg log_gdppc i.colony_bool i.prim_meth repression in_media i.indiscrim i.sd
 
 estimates store m2
 
-outreg2 using results, tex append stats(coef se) bdec(2) e(N_sub N_fail N_clust chi2 ll)label paren title("Base Case")
+outreg2 using results, tex append stats(coef se) bdec(2) e(N_sub N_fail N_clust chi2 ll)label paren titl
 
 // stcurve, cif at(prim_meth = (0,1) any_pi = (0,1)) legend(label(1 "Nonviolent, No Inst.") label(2 "Nonviolent, Inst.") label(3 "Violent, No Inst.") label(4 "Violent, Inst.") ring(0) bplacement(seast)) title("Competing Risks Regression," "Any Parallel Institutions") subtitle("Differences not significant")
 

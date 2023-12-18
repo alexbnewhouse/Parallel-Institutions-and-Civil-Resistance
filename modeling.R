@@ -34,26 +34,6 @@ df <- df %>%
                              location == "Western Sahara" ~ 600, 
                              TRUE ~ loc_cow)) 
 
-df <- df %>% mutate(cyearplus = cyear + 1)
-
-df %>% 
-  group_by(id) %>% 
-  mutate(final_year = case_when(cyear == max(cyear) ~ 1,
-                                TRUE ~ 0)) %>% 
-  ungroup() -> df
-
-df <- df %>% 
-  group_by(id) %>% 
-  mutate(years_active = row_number()) 
-
-df <- df %>%
-  mutate(years_plus = years_active + 1)
-
-df <- df %>% 
-  mutate(end_status = case_when(success == 1 ~ 2,
-                                (success == 0 & final_year == 1) ~ 1,
-                                TRUE ~ 0)) 
-
 gdp <- gdp %>%
   mutate(loc_cow = countrycode::countrycode(countrycode, origin = "iso3c", destination = "cown"))
 
@@ -112,7 +92,25 @@ df <- df %>%
                             TRUE ~ colony)) 
 
 
+df <- df %>% mutate(cyearplus = cyear + 1)
 
+df %>% 
+  group_by(id) %>% 
+  mutate(final_year = case_when(cyear == max(cyear) ~ 1,
+                                TRUE ~ 0)) %>% 
+  ungroup() -> df
+
+df <- df %>% 
+  group_by(id) %>% 
+  mutate(years_active = row_number()) 
+
+df <- df %>%
+  mutate(years_plus = years_active + 1)
+
+df <- df %>% 
+  mutate(end_status = case_when(success == 1 ~ 2,
+                                (success == 0 & final_year == 1) ~ 1,
+                                TRUE ~ 0)) 
 
 
 colony_boolean <- colonies_long %>% 
@@ -154,7 +152,7 @@ df <- df %>%
   mutate(colony = relevel(colony, ref = "0"))
 
 agg_df <- df %>% 
-  group_by(camp_name) %>% 
+  group_by(id) %>% 
   summarise(end_status = max(end_status), loc_cow = max(loc_cow),  repression = mean(repression), length_camp = n(), success = max(success), regime_support = round(median(regime_support)), 
             camp_support = round(median(camp_support)), camp_size = round(median(camp_size)), pi_armed_wing = mean(pi_armed_wing), pi_police = mean(pi_police), pi_education = mean(pi_education), 
             pi_soc_welfare = mean(pi_soc_welfare), pi_trad_media = mean(pi_trad_media), pi_new_media = mean(pi_new_media), pi_courts = mean(pi_courts),
@@ -162,29 +160,85 @@ agg_df <- df %>%
 
 
 library(plm)
+library(fixest)
 agg_df <- agg_df %>%
-  drop_na() %>% 
+  #drop_na() %>% 
   mutate(loc_cow = factor(loc_cow)) %>% 
   mutate(end_status = case_when(end_status == 2 ~ 1,
                                 TRUE ~ 0))
 
-model1 <- plm(length_camp ~ log(gdppc) + colony + prim_meth + sec_defect + repression + in_media + indiscrim + camp_support + camp_size + regime_support + sdirect + 
-                pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect + 
-                prim_meth * pi_education + prim_meth * pi_soc_welfare +
-                prim_meth * pi_trad_media + prim_meth * pi_new_media + prim_meth * pi_courts + prim_meth * pi_police, data = agg_df, index = "loc_cow", model="within")
+model_int <- fixest::feols(length_camp ~ log(gdppc) + colony + prim_meth + sec_defect + repression + in_media + indiscrim + camp_support + camp_size + regime_support + sdirect + 
+                             pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect + 
+                             prim_meth * pi_education + prim_meth * pi_soc_welfare +
+                             prim_meth * pi_trad_media + prim_meth * pi_new_media + prim_meth * pi_courts + prim_meth * pi_police | loc_cow, data = agg_df)
 
-summary(model1)
 
-model_random <- plm(length_camp ~ log(gdppc) + colony + prim_meth + sec_defect + repression + in_media + indiscrim + camp_support + camp_size + regime_support + sdirect + 
-                      pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect + 
-                      prim_meth * pi_education + prim_meth * pi_soc_welfare +
-                      prim_meth * pi_trad_media + prim_meth * pi_new_media + prim_meth * pi_courts + prim_meth * pi_police, data = agg_df, index = "loc_cow", model="random")
+summary(model_int)
 
-summary(model_random)
+model_random <- lm(length_camp ~ log(gdppc) + colony + prim_meth + sec_defect + repression + in_media + indiscrim + camp_support + camp_size + regime_support + sdirect + 
+                     pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect + 
+                     prim_meth * pi_education + prim_meth * pi_soc_welfare +
+                     prim_meth * pi_trad_media + prim_meth * pi_new_media + prim_meth * pi_courts + prim_meth * pi_police, data = agg_df)
+
+model_int_1 <-  fixest::feols(length_camp ~ log(gdppc) + colony + prim_meth + sec_defect + repression + in_media + indiscrim + camp_support + camp_size + regime_support + sdirect + 
+                                pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect + 
+                                prim_meth * pi_education + prim_meth * pi_soc_welfare | loc_cow, data = agg_df)
+
+model_fe <-  fixest::feols(length_camp ~ log(gdppc) + colony + prim_meth + sec_defect + repression + in_media + indiscrim + camp_support + camp_size + regime_support + sdirect + 
+                             pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect | loc_cow, data = agg_df)
+
+
+model_no_controls <- feols(length_camp ~ prim_meth +
+                             pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts +
+                             prim_meth * pi_education + prim_meth * pi_soc_welfare +
+                             prim_meth * pi_trad_media + prim_meth * pi_new_media + prim_meth * pi_courts + prim_meth * pi_police| loc_cow, data = agg_df, panel.id = ~id + loc_cow)
+
+
+
+fixest::etable(model_fe, model_int_1, model_int, model_no_controls, tex = TRUE, headers = c("No Interactions", "Educ and Soc Wel Ints", "All Ints", "No Controls"), 
+               dict = c("log(gdppc)" = "Log(GDP Per Capita)", prim_meth = "Violence of Campaign", sec_defect = "Security Force Defections", repression = "Repression",
+                        in_media = "Media Coverage of Campaign", indiscrim = "Indiscriminate Violence by State", camp_support = "Campaign Support", cap_size = "Campaign Size", camp_support = "Support of Campaign by State", sdirect = "International Sanctions Against State",
+                        pi_education = "Parallel Education", pi_police = "Parallel Police", pi_soc_welfare = "Parallel Social Welfare", pi_trad_media = "Parallel Traditional Media", pi_new_media = "Parallel New Media", pi_courts = "Parallel Courts",
+                        "Violence * Education", "Violence * Social Welfare", "Violence * Traditional Media", "Violence * New Media", "Violence * Courts", "Violence * Police"))
+
+
 
 model2 <- glm(end_status ~ length_camp + log(gdppc) + colony + prim_meth + sec_defect + repression + in_media + indiscrim + camp_support + camp_size + regime_support + sdirect + 
                 pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect + prim_meth * pi_education + prim_meth * pi_soc_welfare +
                 prim_meth * pi_trad_media + prim_meth * pi_new_media + prim_meth * pi_courts + prim_meth * pi_police, data = agg_df, family = "binomial")
+
+model_int <- feglm(success ~ log(gdppc) + colony + prim_meth + sec_defect + repression + in_media + indiscrim + camp_support + camp_size + regime_support + sdirect + 
+                     pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect + 
+                     prim_meth * pi_education + prim_meth * pi_soc_welfare +
+                     prim_meth * pi_trad_media + prim_meth * pi_new_media + prim_meth * pi_courts + prim_meth * pi_police | loc_cow, data = agg_df, family = "binomial")
+
+model_random <- feglm(success ~ log(gdppc) + colony + prim_meth + sec_defect + repression + in_media + indiscrim + camp_support + camp_size + regime_support + sdirect + 
+                        pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect + 
+                        prim_meth * pi_education + prim_meth * pi_soc_welfare +
+                        prim_meth * pi_trad_media + prim_meth * pi_new_media + prim_meth * pi_courts + prim_meth * pi_police, data = agg_df, family = "binomial")
+
+model_int_1 <-  feglm(success ~ log(gdppc) + colony + prim_meth + sec_defect + repression + in_media + indiscrim + camp_support + camp_size + regime_support + sdirect + 
+                        pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect + 
+                        prim_meth * pi_education + prim_meth * pi_soc_welfare | loc_cow, data = agg_df, family = "binomial")
+
+model_fe <-  feglm(success ~ log(gdppc) + colony + prim_meth + sec_defect + repression + in_media + indiscrim + camp_support + camp_size + regime_support + sdirect + 
+                     pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect | loc_cow, data = agg_df, family = "binomial")
+
+model_no_controls <- feglm(success ~ prim_meth +
+                             pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts +
+                             prim_meth * pi_education + prim_meth * pi_soc_welfare +
+                             prim_meth * pi_trad_media + prim_meth * pi_new_media + prim_meth * pi_courts + prim_meth * pi_police| loc_cow, data = agg_df, panel.id = ~id + loc_cow, family = "binomial")
+
+
+fixest::etable(model_fe, model_int_1, model_int, model_no_controls, tex = TRUE, headers = c("No Interactions", "Educ and Soc Wel Ints", "All Ints", "No Controls"), 
+               dict = c("log(gdppc)" = "Log(GDP Per Capita)", prim_meth = "Violence of Campaign", sec_defect = "Security Force Defections", repression = "Repression",
+                        in_media = "Media Coverage of Campaign", indiscrim = "Indiscriminate Violence by State", camp_support = "Campaign Support", camp_size = "Campaign Size", camp_support = "Campaign Support", sdirect = "International Sanctions Against State",
+                        pi_education = "Parallel Education", pi_police = "Parallel Police", pi_soc_welfare = "Parallel Social Welfare", pi_trad_media = "Parallel Traditional Media", pi_new_media = "Parallel New Media", pi_courts = "Parallel Courts",
+                        "Violence * Education", "Violence * Social Welfare", "Violence * Traditional Media", "Violence * New Media", "Violence * Courts", "Violence * Police"))
+
+
+
+
 
 summary(model2)
 
@@ -214,16 +268,18 @@ broom::tidy(model2, conf.int = TRUE) %>%
                           term == "length_camp" ~ "Campaign Length",
                           term == "colony" ~ "Past Colonial History",
                           TRUE ~ term)) %>%
-  ggplot(aes(estimate, term, xmin = conf.low, xmax = conf.high, height = 0, color = term)) +
+  ggplot(aes(estimate, term, xmin = conf.low, xmax = conf.high, height = 0, color = term, shape = p.value)) +
   geom_point() +
   geom_vline(xintercept = 0, lty = 4) +
   geom_errorbarh() +
   guides(color = "none") + 
   labs(x = "Effect on Log Odds of Success",
        y = "Independent Variable",
-       title = "Coefficient Plot for Logistic Regression \n on Success of Campaign") + 
+       title = "Coefficient Plot for Logistic Regression on Success of Campaign",
+       shape = "P Value") + 
   theme_minimal() + 
-  scale_color_manual(values=mycolors)
+  scale_color_manual(values=mycolors) + 
+  scale_shape_binned(breaks = c(.001, .01, .05, .1, 1))
 
 
 # model2 <- lm(length_camp~ repression + camp_support + regime_support + sec_defect + in_media + camp_size + 
@@ -256,19 +312,77 @@ just_failures <- df %>%
 
 model <- coxph(Surv(time = years_active, time2 = years_plus, event = success) ~ log(gdppc) + colony_bool + prim_meth + repression + in_media + indiscrim + camp_support + camp_size + regime_support + pi_armed_wing + pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect + prim_meth * pi_trad_media + prim_meth * pi_new_media + prim_meth * pi_courts + prim_meth * pi_education + prim_meth * pi_police + prim_meth * pi_soc_welfare, data = just_successes, cluster = id)
 
-model2 <- coxph(Surv(time = years_active, time2 = years_plus, event = end_status) ~ log(gdppc) + regime_support + camp_support + sec_defect + prim_meth + pi_armed_wing + pi_soc_welfare + pi_courts + pi_new_media + pi_trad_media + pi_education + pi_police + prim_meth * pi_soc_welfare + prim_meth * pi_education + prim_meth * pi_courts + prim_meth * pi_new_media + prim_meth * pi_trad_media + prim_meth * pi_police, data = just_failures, cluster = id)
 
-summary(model)
+model_ph <- coxph(Surv(time = years_active, time2 = years_plus, event = final_year) ~ log(gdppc) + colony_bool + prim_meth + repression + 
+                         in_media + indiscrim + sdirect +
+                         camp_support + camp_size + regime_support + pi_education + pi_police + pi_soc_welfare + 
+                         pi_trad_media + pi_new_media + pi_courts + sec_defect, data = df, cluster = id)
 
-stargazer::stargazer(model, model2, type = "text", title = "Preliminary Cox Proportional Hazard Models with NAVCO Variables", header = FALSE)
+model_ph_int_1 <- coxph(Surv(time = years_active, time2 = years_plus, event = final_year) ~ log(gdppc) + colony_bool + prim_meth + repression + 
+                         in_media + indiscrim + sdirect +
+                         camp_support + camp_size + regime_support + pi_education + pi_police + pi_soc_welfare + 
+                         pi_trad_media + pi_new_media + pi_courts + sec_defect + 
+                         prim_meth * pi_education + 
+                         prim_meth * pi_soc_welfare, data = df, cluster = id)
+
+model_ph_full <- coxph(Surv(time = years_active, time2 = years_plus, event = final_year) ~ log(gdppc) + colony_bool + prim_meth + repression + 
+                  in_media + indiscrim + sdirect +
+                  camp_support + camp_size + regime_support + pi_education + pi_police + pi_soc_welfare + 
+                  pi_trad_media + pi_new_media + pi_courts + sec_defect + 
+                  prim_meth * pi_trad_media + prim_meth * pi_new_media + 
+                  prim_meth * pi_courts + prim_meth * pi_education + prim_meth * pi_police + 
+                  prim_meth * pi_soc_welfare, data = df, cluster = id)
+
+model_ph_no_controls <- coxph(Surv(time = years_active, time2 = years_plus, event = final_year) ~ prim_meth + pi_education + pi_police + pi_soc_welfare + 
+                         pi_trad_media + pi_new_media + pi_courts + 
+                         prim_meth * pi_trad_media + prim_meth * pi_new_media + 
+                         prim_meth * pi_courts + prim_meth * pi_education + prim_meth * pi_police + 
+                         prim_meth * pi_soc_welfare, data = df, cluster = id)
+
+stargazer::stargazer(model_ph, model_ph_int_1, model_ph_full, model_ph_no_controls, covariate.labels = c("Log(GDP Per Capita", "Colonial History", "Campaign Violence", "Repression",
+                                                                                                         "Media Coverage of Campaign", "Indiscriminate Violence by State", "International Sanctions Against Regime", "Campaign Support",
+                                                                                                         "Campaign Size", "Reigme Support of Campaign", "Parallel Education", "Parallel Police", "Parallel Social Welfare",
+                                                                                                         "Parallel Traditional Media", "Parallel New Media", "Parallel Courts", "Security Force Defections", "Violence $\\times$ Traditional Media", "Violence $\\times$ New Media", "Violence $\\times$ Courts", "Violence $\\times$ Education", 
+                                                                                                         "Violence $\\times$ Police", "Violence $\\times$ Social Welfare"))
+
+stargazer::stargazer(model, model2, title = "Preliminary Cox Proportional Hazard Models with NAVCO Variables", header = FALSE)
 
 
 library(nnet)
 df$end_status <- as.factor(df$end_status)
 df$colony_bool <- as.factor(df$colony_bool)
-mn_mod <- multinom(end_status ~ log(gdppc) + colony_bool + years_active + prim_meth + repression + in_media + indiscrim + sdirect +
-                     camp_support + camp_size + regime_support + pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect + 
-                     prim_meth * pi_trad_media + prim_meth * pi_new_media + prim_meth * pi_courts + prim_meth * pi_education + prim_meth * pi_police + prim_meth * pi_soc_welfare, data = df, family = "multinomial")
+
+mn_mod <-  multinom(end_status ~ log(gdppc) + colony_bool + years_active + prim_meth + repression + in_media + indiscrim + sdirect +
+                      camp_support + camp_size + regime_support + pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect, data = df, family = "multinomial")
+
+mn_mod_int_1 <-  multinom(end_status ~ log(gdppc) + colony_bool + years_active + prim_meth + repression + in_media + indiscrim + sdirect +
+                            camp_support + camp_size + regime_support + pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect +
+                            prim_meth * pi_education + prim_meth * pi_soc_welfare, data = df, family = "multinomial")
+
+mn_mod_no_controls <-  multinom(end_status ~ prim_meth + pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts +
+                                  prim_meth * pi_trad_media + prim_meth * pi_new_media + prim_meth * pi_courts + prim_meth * pi_education + prim_meth * pi_police + prim_meth * pi_soc_welfare, data = df, family = "multinomial")
+
+mn_mod_full <- multinom(end_status ~ log(gdppc) + colony_bool + years_active + prim_meth + repression + 
+                          in_media + indiscrim + sdirect +
+                          camp_support + camp_size + regime_support + pi_education + pi_police + pi_soc_welfare + 
+                          pi_trad_media + pi_new_media + pi_courts + sec_defect + 
+                          prim_meth * pi_trad_media + prim_meth * pi_new_media + 
+                          prim_meth * pi_courts + prim_meth * pi_education + prim_meth * pi_police + 
+                          prim_meth * pi_soc_welfare, data = df, family = "multinomial")
+
+stargazer::stargazer(mn_mod, mn_mod_full, covariate.labels = c("Log(GDP Per Capita", "Colonial History", "Years Active", "Campaign Violence", "Repression",
+                                                               "Media Coverage of Campaign", "Indiscriminate Violence by State", "International Sanctions Against Regime", "Campaign Support",
+                                                               "Campaign Size", "Reigme Support of Campaign", "Parallel Education", "Parallel Police", "Parallel Social Welfare",
+                                                               "Parallel Traditional Media", "Parallel New Media", "Parallel Courts", "Security Force Defections", "Violence $\\times$ Traditional Media", "Violence $\\times$ New Media", "Violence $\\times$ Courts", "Violence $\\times$ Education", 
+                                                               "Violence $\\times$ Police", "Violence $\\times$ Social Welfare"))
+
+
+stargazer::stargazer(mn_mod_int_1, mn_mod_no_controls, covariate.labels = c("Log(GDP Per Capita", "Colonial History", "Years Active", "Campaign Violence", "Repression",
+                                                               "Media Coverage of Campaign", "Indiscriminate Violence by State", "International Sanctions Against Regime", "Campaign Support",
+                                                               "Campaign Size", "Reigme Support of Campaign", "Parallel Education", "Parallel Police", "Parallel Social Welfare",
+                                                               "Parallel Traditional Media", "Parallel New Media", "Parallel Courts", "Security Force Defections", "Violence $\\times$ Traditional Media", "Violence $\\times$ New Media", "Violence $\\times$ Courts", "Violence $\\times$ Education", 
+                                                               "Violence $\\times$ Police", "Violence $\\times$ Social Welfare"))
+
 
 broom::tidy(mn_mod, conf.int = TRUE) %>% 
   knitr::kable() %>% 
@@ -282,11 +396,11 @@ broom::tidy(mn_mod, conf.int = TRUE, exponentiate = TRUE) %>%
 library(sjPlot)
 plot_model(mn_mod, dot.size = 2, grid = TRUE, show.values = FALSE, title = "Coefficient Plot")
 
-
+stargazer::stargazer(mn_mod)
 
 library(interactions)
 library(ggstance)
-tt <- broom::tidy(mn_mod,conf.int=TRUE)
+tt <- broom::tidy(mn_mod_full,conf.int=TRUE)
 tt <- tt %>% 
   filter(term!="(Intercept)")  %>% 
   filter(term!="prim_meth1:pi_police1")
@@ -307,18 +421,32 @@ tt %>%
                           term == "prim_meth1:pi_education1" ~ "Violent Campaign * Education",
                           term == "prim_meth1:pi_soc_welfare1" ~ "Violent Campaign * Social Welfare",
                           term == "prim_meth1:pi_police1" ~ "Violent Campaign * Law Enforcement",
+                          term == "log(gdppc)" ~ "Log(GDP Per Capita)",
+                          term == "years_active" ~ "Years Active",
+                          term == "in_media" ~ "Media Coverage",
+                          term == "indiscrim" ~ "Indiscriminate Violence by State",
+                          term == "sdirect" ~ "International Sanctions Against State",
+                          term == "sec_defect" ~ "Security Force Defections",
+                          term == "regime_support" ~ "Regime Support of Campaign",
+                          term == "colony_boolTRUE" ~ "Colonial History",
+                          term == "camp_support" ~ "Campaign Support",
+                          term == "camp_size" ~ "Campaign Size",
+                          term == "repression" ~ "Repression",
                           TRUE ~ term)) %>%
   mutate(y.level = case_when(y.level == 2 ~ "Success",
                              y.level == 1 ~ "Failure")) %>%
-  ggplot(aes(estimate, term, xmin = conf.low, xmax = conf.high, height = 0, color = y.level)) +
+  ggplot(aes(estimate, term, xmin = conf.low, xmax = conf.high, height = 0, color = y.level, shape=p.value)) +
   ggstance::geom_pointrangeh(position=position_dodgev(height=0.75)) +
   geom_vline(xintercept = 0, lty = 4) +
-  ggstance::geom_errorbarh(position=position_dodgev(height=0.75)) +
+  ggstance::geom_errorbarh(position=position_dodgev(height=0.75), height = .5) +
   labs(x = "Effect on Outcome Rate",
        y = "Independent Variable",
        title = "Coefficient Plot for Multinomial Logit/Competing Risks",
-       color = "Outcome") + 
-  theme_minimal() 
+       shape = "P Value") + 
+  facet_wrap(vars(y.level)) + 
+  guides(color = "none") +
+  scale_shape_binned(breaks = c(.001,.05,.1))
+
 
 ggplot(tt, aes(x=estimate,y=term,colour=y.level))+
   geom_pointrangeh(aes(xmin=conf.low,
@@ -335,20 +463,48 @@ df %>%
   mutate(failure = case_when(end_status == 1 ~ 1,
                              TRUE ~ 0)) %>%
   mutate(any_pi = case_when((pi_education == 1 |
-                              pi_soc_welfare == 1 |
-                              pi_trad_media == 1 |
-                              pi_new_media == 1 |
-                              pi_police == 1 |
-                              pi_courts == 1 |
+                               pi_soc_welfare == 1 |
+                               pi_trad_media == 1 |
+                               pi_new_media == 1 |
+                               pi_police == 1 |
+                               pi_courts == 1 |
                                pi_armed_wing == 1 |
                                pi_pol_wing == 1 | 
                                pi_pol_party == 1) ~ 1,
                             TRUE ~ 0)) %>%
-  select(id, years_active, years_plus, gdppc, colony_bool, prim_meth, sec_defect, regime_support, repression, camp_support, camp_size, sdirect, indiscrim, cold_war, pi_education, pi_soc_welfare, pi_trad_media, pi_new_media, pi_police, pi_armed_wing, pi_courts, pi_pol_party, any_pi, failure, success) %>% 
+  select(id, years_active, years_plus, gdppc, colony_bool, prim_meth, sec_defect, 
+         regime_support, repression, camp_support, camp_size, sdirect, indiscrim, 
+         cold_war, pi_education, pi_soc_welfare, pi_trad_media, pi_new_media, pi_police, pi_armed_wing, pi_courts, pi_pol_party, any_pi, in_media, failure, success) %>% 
   write_csv("df_cleaned.csv")
 
 
 
 
+
+library(lmtest)
+
+dwtest(lm(success ~ log(gdppc) + colony + prim_meth + sec_defect + repression + in_media + indiscrim + camp_support + camp_size + regime_support + sdirect + 
+            pi_education + pi_police + pi_soc_welfare + pi_trad_media + pi_new_media + pi_courts + sec_defect, data = df)) 
+
+
+## Residuals
+
+data.frame("No Interactions" = resid(model_fe)) %>% 
+  rownames_to_column(var = "index") %>% 
+  mutate("All Interactions" = resid(model_int)) %>%
+  mutate("Education and Social Welfare Interactions" = resid(model_int_1)) %>%
+  mutate(index = as.numeric(index)) %>% 
+  rename("No Interactions" = `No.Interactions`) %>%
+  pivot_longer(cols = c(`No Interactions`, `Education and Social Welfare Interactions`, `All Interactions`), names_to = "Model", values_to = "Residual") %>%
+  ggplot() + 
+  geom_point(aes(x = index, y = Residual, color = Model)) + 
+  facet_wrap(~Model) +
+  scale_x_continuous(breaks = seq(0, 200, 50)) +
+  labs(
+    x = "Observation Number",
+    y = "Residual Value",
+    title = "Residual Plots for Fixed-Effects Linear Regression"
+  ) + 
+  guides(color="none")
 
 

@@ -1,0 +1,95 @@
+\documentclass[]{article}
+\setlength{\pdfpagewidth}{8.5in} \setlength{\pdfpageheight}{11in}
+\begin{document}
+\begin{tabular}{lcc}
+\multicolumn{3}{c}{Base Case} \\ \hline
+ & (1) & (2) \\
+VARIABLES & Analysis time when record ends & Analysis time when record ends \\ \hline
+ &  &  \\
+log\_gdppc & -0.20* & -0.19 \\
+ & (0.119) & (0.119) \\
+colony\_bool = 1 & -0.33 & -0.34 \\
+ & (0.242) & (0.238) \\
+prim\_meth = 1 & -0.61* & -0.79** \\
+ & (0.360) & (0.355) \\
+repression & -0.22** & -0.24** \\
+ & (0.108) & (0.107) \\
+in\_media & 0.53*** & 0.54*** \\
+ & (0.161) & (0.162) \\
+indiscrim = 1 & -0.02 & 0.01 \\
+ & (0.247) & (0.244) \\
+indiscrim = 2 & -18.50*** & -18.42*** \\
+ & (1.061) & (1.057) \\
+sdirect = 1 & 0.02 & 0.06 \\
+ & (0.294) & (0.288) \\
+camp\_support & 0.29 & 0.23 \\
+ & (0.239) & (0.236) \\
+camp\_size & 0.17* & 0.17* \\
+ & (0.089) & (0.088) \\
+regime\_support & -0.54** & -0.54** \\
+ & (0.235) & (0.237) \\
+pi\_education = 1 & -0.95 & -0.59 \\
+ & (0.708) & (0.643) \\
+pi\_police = 1 & 0.59 & 0.49 \\
+ & (0.576) & (0.559) \\
+pi\_soc\_welfare = 1 & 0.06 & 0.22 \\
+ & (0.347) & (0.320) \\
+pi\_trad\_media = 1 & 0.28 & 0.20 \\
+ & (0.315) & (0.258) \\
+pi\_new\_media = 1 & -0.22 & -0.52 \\
+ & (0.681) & (0.432) \\
+pi\_courts = 1 & 0.64* & 0.04 \\
+ & (0.386) & (0.310) \\
+sec\_defect = 1 & 1.09*** & 1.10*** \\
+ & (0.235) & (0.231) \\
+0b.prim\_meth\#0b.pi\_trad\_media & 0.00 &  \\
+ & (0.000) &  \\
+0b.prim\_meth\#1o.pi\_trad\_media & 0.00 &  \\
+ & (0.000) &  \\
+1o.prim\_meth\#0b.pi\_trad\_media & 0.00 &  \\
+ & (0.000) &  \\
+1.prim\_meth\#1.pi\_trad\_media & -0.16 &  \\
+ & (0.544) &  \\
+0b.prim\_meth\#0b.pi\_new\_media & 0.00 &  \\
+ & (0.000) &  \\
+0b.prim\_meth\#1o.pi\_new\_media & 0.00 &  \\
+ & (0.000) &  \\
+1o.prim\_meth\#0b.pi\_new\_media & 0.00 &  \\
+ & (0.000) &  \\
+1.prim\_meth\#1.pi\_new\_media & -0.27 &  \\
+ & (0.800) &  \\
+0b.prim\_meth\#0b.pi\_courts & 0.00 &  \\
+ & (0.000) &  \\
+0b.prim\_meth\#1o.pi\_courts & 0.00 &  \\
+ & (0.000) &  \\
+1o.prim\_meth\#0b.pi\_courts & 0.00 &  \\
+ & (0.000) &  \\
+1.prim\_meth\#1.pi\_courts & -0.98* &  \\
+ & (0.564) &  \\
+0b.prim\_meth\#0b.pi\_education & 0.00 & 0.00 \\
+ & (0.000) & (0.000) \\
+0b.prim\_meth\#1o.pi\_education & 0.00 & 0.00 \\
+ & (0.000) & (0.000) \\
+1o.prim\_meth\#0b.pi\_education & 0.00 & 0.00 \\
+ & (0.000) & (0.000) \\
+1.prim\_meth\#1.pi\_education & 2.17*** & 1.65** \\
+ & (0.809) & (0.690) \\
+0b.prim\_meth\#0b.pi\_soc\_welfare & 0.00 & 0.00 \\
+ & (0.000) & (0.000) \\
+0b.prim\_meth\#1o.pi\_soc\_welfare & 0.00 & 0.00 \\
+ & (0.000) & (0.000) \\
+1o.prim\_meth\#0b.pi\_soc\_welfare & 0.00 & 0.00 \\
+ & (0.000) & (0.000) \\
+1.prim\_meth\#1.pi\_soc\_welfare & -19.48*** & -19.61*** \\
+ & (0.629) & (0.645) \\
+ &  &  \\
+Observations & 1,887 & 1,887 \\
+N\_sub & 315 & 315 \\
+N\_fail & 98 & 98 \\
+N\_clust & 315 & 315 \\
+chi2 & 4321 & 4063 \\
+ ll & -469.2 & -470.6 \\ \hline
+\multicolumn{3}{c}{ Robust standard errors in parentheses} \\
+\multicolumn{3}{c}{ *** p$<$0.01, ** p$<$0.05, * p$<$0.1} \\
+\end{tabular}
+\end{document}

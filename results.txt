@@ -1,0 +1,89 @@
+Base Case			
+		(1)	(2)
+VARIABLES	LABELS	Analysis time when record ends	Analysis time when record ends
+			
+log_gdppc	log_gdppc	-0.20*	-0.19
+		(0.119)	(0.119)
+1.colony_bool	colony_bool = 1	-0.33	-0.34
+		(0.242)	(0.238)
+1.prim_meth	prim_meth = 1	-0.61*	-0.79**
+		(0.360)	(0.355)
+repression	repression	-0.22**	-0.24**
+		(0.108)	(0.107)
+in_media	in_media	0.53***	0.54***
+		(0.161)	(0.162)
+1.indiscrim	indiscrim = 1	-0.02	0.01
+		(0.247)	(0.244)
+2.indiscrim	indiscrim = 2	-18.50***	-18.42***
+		(1.061)	(1.057)
+1.sdirect	sdirect = 1	0.02	0.06
+		(0.294)	(0.288)
+camp_support	camp_support	0.29	0.23
+		(0.239)	(0.236)
+camp_size	camp_size	0.17*	0.17*
+		(0.089)	(0.088)
+regime_support	regime_support	-0.54**	-0.54**
+		(0.235)	(0.237)
+1.pi_education	pi_education = 1	-0.95	-0.59
+		(0.708)	(0.643)
+1.pi_police	pi_police = 1	0.59	0.49
+		(0.576)	(0.559)
+1.pi_soc_welfare	pi_soc_welfare = 1	0.06	0.22
+		(0.347)	(0.320)
+1.pi_trad_media	pi_trad_media = 1	0.28	0.20
+		(0.315)	(0.258)
+1.pi_new_media	pi_new_media = 1	-0.22	-0.52
+		(0.681)	(0.432)
+1.pi_courts	pi_courts = 1	0.64*	0.04
+		(0.386)	(0.310)
+1.sec_defect	sec_defect = 1	1.09***	1.10***
+		(0.235)	(0.231)
+0b.prim_meth#0b.pi_trad_media		0.00	
+		(0.000)	
+0b.prim_meth#1o.pi_trad_media		0.00	
+		(0.000)	
+1o.prim_meth#0b.pi_trad_media		0.00	
+		(0.000)	
+1.prim_meth#1.pi_trad_media		-0.16	
+		(0.544)	
+0b.prim_meth#0b.pi_new_media		0.00	
+		(0.000)	
+0b.prim_meth#1o.pi_new_media		0.00	
+		(0.000)	
+1o.prim_meth#0b.pi_new_media		0.00	
+		(0.000)	
+1.prim_meth#1.pi_new_media		-0.27	
+		(0.800)	
+0b.prim_meth#0b.pi_courts		0.00	
+		(0.000)	
+0b.prim_meth#1o.pi_courts		0.00	
+		(0.000)	
+1o.prim_meth#0b.pi_courts		0.00	
+		(0.000)	
+1.prim_meth#1.pi_courts		-0.98*	
+		(0.564)	
+0b.prim_meth#0b.pi_education		0.00	0.00
+		(0.000)	(0.000)
+0b.prim_meth#1o.pi_education		0.00	0.00
+		(0.000)	(0.000)
+1o.prim_meth#0b.pi_education		0.00	0.00
+		(0.000)	(0.000)
+1.prim_meth#1.pi_education		2.17***	1.65**
+		(0.809)	(0.690)
+0b.prim_meth#0b.pi_soc_welfare		0.00	0.00
+		(0.000)	(0.000)
+0b.prim_meth#1o.pi_soc_welfare		0.00	0.00
+		(0.000)	(0.000)
+1o.prim_meth#0b.pi_soc_welfare		0.00	0.00
+		(0.000)	(0.000)
+1.prim_meth#1.pi_soc_welfare		-19.48***	-19.61***
+		(0.629)	(0.645)
+			
+Observations		1,887	1,887
+N_sub		315	315
+N_fail		98	98
+N_clust		315	315
+chi2		4321	4063
+ll		-469.2	-470.6
+Robust standard errors in parentheses			
+*** p<0.01, ** p<0.05, * p<0.1			
